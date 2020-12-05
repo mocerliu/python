@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>同学</title>
+    <link rel="stylesheet" href="../src/layui/css/layui.css">
+    <script src="../src/layui/layui.js"></script>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.0/jquery.js"></script>
+
+</head>
+
+<body>
+
+    <!-- <button onclick="showStudents()">chazhao</button> -->
+    <table class="layui-hide" id="students"></table>
+    <div id="split_page">
+    </div>
+
+    <script>
+        // layui.use('laypage', function () {
+        //     var laypage = layui.laypage;
+
+        //     //执行一个laypage实例
+        //     laypage.render({
+        //         elem: 'split_page' //注意，这里的 test1 是 ID，不用加 # 号
+        //             ,
+        //         count: 50 //数据总数，从服务端得到
+        //     });
+        // });
+
+
+        layui.use('table', function () {
+            var table = layui.table;
+
+            table.render({
+                elem: '#students',
+                url: 'http://127.0.0.1:5000/api/student/1',
+                cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    ,
+                limits: 10,
+                limit: 10,
+                height: 666,
+                cols: [
+                    [{
+                            field: 'eid',
+                            width: 80,
+                            title: 'ID',
+                            sort: true
+                        }, {
+                            field: 'student_number',
+                            width: 80,
+                            title: '学号'
+                        }, {
+                            field: 'student_name',
+                            width: 80,
+                            title: '姓名',
+                            sort: true
+                        }, {
+                            field: 'student_college',
+                            sort: true,
+                            title: '学院'
+                        }, {
+                            field: 'student_major',
+                            title: '专业',
+                            sort: true
+                            // minWidth: 100
+                        } //minWidth：局部定义当前单元格的最小宽度，layui 2.2.1 新增
+                        , {
+                            field: 'student_grade',
+                            title: '毕业年份',
+                            sort: true
+                        }, {
+                            field: 'student_class',
+                            title: '班级',
+                            sort: true
+                        }, {
+                            field: 'student_age',
+                            title: '年龄'
+                        }
+                    ]
+                ],
+                page: true
+            });
+        });
+    </script>
+</body>
+
+</html>

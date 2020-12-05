@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+
+<head>
+    <meta charset="UTF-8">
+    <title>学生信息管理系统-登录</title>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+
+</head>
+
+<body>
+    <div id="log">
+        <ul>
+            <li>
+                <h3>学生信息管理系统</h3>
+            </li>
+            <li>账号：<input type="text" id="userName" placeholder="请输入账户名" autofocus></li>
+            <li>密码：<input type="password" id="password" placeholder="请输入密码"></li>
+            <li><input type="button" class="button login" value="登录" onclick="login()">
+                <input type="button" class="button sign" value="注册" onclick="sign()">
+            </li>
+        </ul>
+    </div>
+</body>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        background-image: linear-gradient(to bottom right, rgb(12, 161, 101), white);
+    }
+
+    body {
+        display: flex;
+        align-items: center;
+    }
+
+    body:after {
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: inherit;
+        filter: blur(2px);
+    }
+
+    li {
+        height: 40px;
+        list-style: none;
+    }
+
+
+    #log {
+        margin: 0 auto;
+        line-height: 0;
+        width: 300px;
+        height: 160px;
+        padding: 20px;
+        text-align: center;
+        border-radius: 5%;
+        background-image: linear-gradient(to bottom right, white, rgb(96, 218, 169));
+        z-index: 10;
+        box-shadow: 0px 0px 50px rgb(96, 218, 169);
+    }
+
+
+    #log input {
+        box-sizing: border-box;
+        padding: 5px;
+        border: none;
+    }
+
+    .button {
+        width: 60px;
+        height: 30px;
+        border: none;
+        border-radius: 5px;
+        background-color: azure;
+    }
+
+    .button:hover {
+        background-color: rgb(31, 169, 113);
+        color: #fff;
+    }
+
+    .login {
+        margin-right: 30px;
+    }
+</style>
+
+<script>
+    var settings = {
+        "url": "http://127.0.0.1:5000/UserLogin",
+        "method": "POST",
+        "timeout": 0,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "data": JSON.stringify(data),
+    };
+
+
+    function Ajax(url, type, data, success, error) {
+        let urlbase = "http://127.0.0.1:5000";
+        $.ajax({
+            url: urlbase + url,
+            method: type,
+            data: data,
+            dataType: "json",
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            success: success,
+            error: error
+        })
+    }
+
+    // 获取 input value
+    function getInputValue() {
+        let userName = $("#userName").val();
+        let password = $("#password").val();
+
+        let user = {
+            userName: userName,
+            password: password
+        }
+        return user;
+    }
+    //
+    //  input验证
+    //
+    function CheckLogin() {
+        let user = getInputValue()
+
+        let flag = user.userName.replace(/(^s*)|(s*$)/g, "").length == 0 || user.password.replace(/(^s*)|(s*$)/g, "")
+            .length ==
+            0 ? false : true;
+
+        if (flag) {
+            console.log("ok")
+            return true
+        } else {
+            return false
+        }
+    }
+
+    // 登录
+    function login() {
+        if (!CheckLogin()) {
+            // alert("ok")
+            return;
+        }
+        let user = getInputValue()
+
+        let url = "/UserLogin"
+
+        var settings = {
+            "url": "http://127.0.0.1:5000/UserLogin",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "data": JSON.stringify(user),
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+            if (response.user) {
+                sessionStorage.setItem("s_manager", JSON.stringify({
+                    name: response.user.userName,
+                    eid: response.user.eid
+                }))
+                navToIndex(response);
+            } else {
+                navToIndex(response);
+            }
+
+        });
+    }
+
+    // 注册
+    function sign() {
+        if (!CheckLogin()) {
+            // alert("ok")
+            return;
+        }
+        let user = getInputValue()
+        let url = "/UserSignIn";
+        var settings = {
+            "url": "http://127.0.0.1:5000/UserSignin",
+            "method": "POST",
+            "timeout": 0,
+            "headers": {
+                "Content-Type": "application/json"
+            },
+            "data": JSON.stringify(user),
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+            navToIndex(response);
+        });
+
+
+    }
+
+    function navToIndex(res) {
+        if (res.user) {
+            alert("登录成功，正在跳转...");
+            // window.localStorage.setItem("s_name",res.mes.)
+            window.location.href = "./view/index.html";
+        } else {
+            alert("登录失败，请检查用户名和密码。");
+        }
+    }
+</script>
+
+</html>

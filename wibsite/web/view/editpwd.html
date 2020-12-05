@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>修改密码</title>
+
+
+
+    <link rel="stylesheet" href="../src/layui/css/layui.css">
+    <script src="../src/layui/layui.js"></script>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.0/jquery.js"></script>
+
+</head>
+
+<body>
+
+
+    <form class="layui-form" action="" method="put" onsubmit="return false">
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码</label>
+            <div class="layui-input-inline">
+                <input id="pwd" type="password" name="pwd" required lay-verify="required" placeholder="请输入密码"
+                    autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">确认密码</label>
+            <div class="layui-input-inline">
+                <input type="password" name="repwd" required lay-verify="required" placeholder="请输入密码"
+                    autocomplete="off" class="layui-input">
+            </div>
+            <div id="repwd" class="layui-form-mid layui-word-aux"></div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+
+
+
+
+    <script>
+        layui.use('form', function () {
+            var form = layui.form;
+            var state = sessionStorage.getItem("s_manager");
+
+            //监听提交
+            form.on('submit(formDemo)', function (data) {
+                var settings = {
+                    "url": "http://127.0.0.1:5000/UserEdit/pwd",
+                    "method": "PUT",
+                    "timeout": 0,
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "data": JSON.stringify({
+                        "eid": (JSON.parse(state).eid).toString(),
+                        "pwd": document.getElementById("pwd").value
+                    }),
+                };
+
+                $.ajax(settings).done(function (response) {
+                        if (response.msg == 'ok.') {
+                            layer.open({
+                                title: '修改成功',
+                                content: '下次登录请使用新密码登录'
+                            });
+                            $("input")[0].val("");
+                            $("input")[1].val("");
+                        }
+                    })
+                    .fail(function (res) {
+                        console.log(res);
+                    })
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>

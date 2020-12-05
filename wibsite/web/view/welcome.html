@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>welcome</title>
+</head>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.0/jquery.js"></script>
+
+<body>
+    <div class="admin" id="admin">
+
+        我是admin，我可以看到这句话。
+    </div>
+    <div class="stu" id="stu">
+        
+        我是学生，我可以看到这句话。
+
+    </div>
+
+    <!-- <button onclick="class_student_click()">查找</button> -->
+
+</body>
+
+
+
+<script>
+
+    const user = window.sessionStorage.getItem('s_manager')
+    const user_id = JSON.parse(user).eid
+
+    console.log(user_id);
+    if(user_id === 1){
+        let dom_stu = document.querySelector("#stu")
+        dom_stu.style.display = "none";
+    }
+
+
+
+</script>
+
+</html>
